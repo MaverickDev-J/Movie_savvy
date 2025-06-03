@@ -1,0 +1,54 @@
+# ─── Python junk ───────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+*.egg-info/
+.pytest_cache/
+.coverage
+*.log
+
+# ─── Editors / OS ──────────────────────────────────────────────────────────────
+*.swp
+*.swo
+*~
+.DS_Store
+.vscode/
+.idea/
+*.sublime-*
+
+# ─── Environment & Dependencies ────────────────────────────────────────────────
+.env
+.venv/
+venv/
+env/
+.conda/
+*.env
+
+# ─── DVC-tracked artefacts - keep them ONLY in DVC cache ───────────────────────
+rag_system/data/raw/
+rag_system/data/processed/
+rag_system/models/mistral-7b-finetuned/lit_model.pth
+rag_system/models/mistral-7b-finetuned/lit_model.pth.lora
+rag_system/models/mistral-7b-finetuned/tokenizer.model
+rag_system/retrieval/index/
+rag_system/output/results/
+
+# ─── DVC cache itself (huge blobs) ─────────────────────────────────────────────
+.dvc/cache/
+
+# ─── Lightning AI / ML specific ────────────────────────────────────────────────
+lightning_logs/
+wandb/
+.neptune/
+mlruns/
+checkpoints/
+*.ckpt
+*.pth
+*.safetensors
+
+# ─── Temporary files ───────────────────────────────────────────────────────────
+*.tmp
+*.temp
+.tmp/
