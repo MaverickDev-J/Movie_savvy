@@ -1,0 +1,118 @@
+# RAG System Configuration
+# Main configuration file for the entertainment RAG system
+
+# System Settings
+system:
+  name: "Entertainment RAG System"
+  version: "1.0"
+  description: "Movie-savvy RAG system for entertainment queries"
+
+# Data Configuration
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  categories:
+    - "anime"
+    - "manga" 
+    - "bollywood"
+    - "hollywood"
+    - "kdrama"
+    - "kmovie"
+  
+  # Preprocessing settings
+  preprocessing:
+    chunk_size: 512
+    chunk_overlap: 50
+    output_file: "processed_chunks.jsonl"
+    metadata_file: "metadata.json"
+    log_file: "preprocess_log.txt"
+
+# Retrieval Configuration
+retrieval:
+  # Embedding model
+  embedding_model: "all-MiniLM-L6-v2"
+  embedding_dimension: 384
+  
+  # FAISS settings
+  index:
+    type: "faiss"
+    index_file: "index.bin"
+    metadata_file: "index_metadata.json"
+    save_dir: "retrieval/index"
+  
+  # Retrieval parameters
+  top_k: 5
+  similarity_threshold: 0.7
+  max_retrieved_tokens: 2048
+
+# Generation Configuration  
+generation:
+  # Model settings
+  model:
+    name: "mistral-7b-finetuned"
+    path: "models/mistral-7b-finetuned"
+    checkpoint_file: "lit_model.pth"
+    lora_file: "lit_model.pth.lora"
+    config_file: "config.json"
+  
+  # Generation parameters
+  parameters:
+    max_new_tokens: 256  # Restored for L40S capacity
+    temperature: 0.7
+    top_k: 50  # CHANGED: Removed top_p, kept only top_k for LitGPT compatibility
+    repetition_penalty: 1.1
+    do_sample: true
+    quantize: null  # No quantization needed on L40S
+  
+  # Prompt configuration
+  prompt:
+    template_file: "generation/prompt_templates/rag_prompt.txt"
+    style: "movie_savvy"
+    max_context_length: 8192  # Restored for L40S VRAM
+
+# Pipeline Configuration
+pipeline:
+  # Execution settings
+  batch_size: 1
+  timeout: 300  # seconds
+  
+  # Logging
+  logging:
+    level: "INFO"
+    log_dir: "output/logs"
+    log_file: "rag_pipeline.log"  # Restored original name
+  
+  # Output settings
+  output:
+    results_dir: "output/results"
+    save_intermediate: true
+    result_format: "json"
+
+# Performance Settings
+performance:
+  # Device settings
+  device: "cuda"  # Explicit CUDA for L40S
+  max_memory_mb: 4096  # Increased for L40S's 48GB VRAM
+  
+  # Caching
+  cache_embeddings: true
+  cache_retrievals: false  # Disabled for flexibility
+  
+  # Parallel processing
+  num_workers: 4  # Restored for L40S performance
+  multiprocessing: false
+
+# Validation Settings
+validation:
+  # Test queries for system validation
+  test_queries:
+    - "Find anime similar to Berserk with dark themes"
+    - "Compare Monkey D. Luffy and Eren Yeager character development"
+    - "How does Pushpa Raj evolve in Pushpa 2: The Rule"
+  
+  # Performance metrics
+  metrics:
+    - "retrieval_time"
+    - "generation_time" 
+    - "total_time"
+    - "relevance_score"  # Restored for manual evaluation
