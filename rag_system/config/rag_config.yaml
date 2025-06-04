@@ -69,6 +69,9 @@ generation:
     template_file: "generation/prompt_templates/rag_prompt.txt"
     style: "movie_savvy"
     max_context_length: 8192  # Restored for L40S VRAM
+    
+
+  history_window: 3
 
 # Pipeline Configuration
 pipeline:
