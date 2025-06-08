@@ -52,3 +52,25 @@ checkpoints/
 *.tmp
 *.temp
 .tmp/llm-finetune/
+
+
+# ─── Lightning Studio / Development Tools ──────────────────────────────────────
+.cursor-server/
+.lesshst
+.lightning_studio/
+.vscode-server/
+.windsurf-server/
+
+# ─── Backup directories ────────────────────────────────────────────────────────
+dvc-backup/
+
+# ─── LLM Fine-tuning directory ─────────────────────────────────────────────────
+llm-finetune/
+
+# ─── Utils directory (if you want to keep it untracked) ────────────────────────
+rag_system/utils/
+
+# ─── Development servers and tools ─────────────────────────────────────────────
+.cursor-server
+.vscode-server
+.windsurf-server
