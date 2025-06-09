@@ -11,3 +11,24 @@ stages:
     metrics:
     - rag_system/data/processed/processing_stats.json:
         cache: false
+  embed:
+    cmd: python rag_system/retrieval/embedder.py
+    deps:
+    - rag_system/config/rag_config.yaml
+    - rag_system/data/processed/metadata.json
+    - rag_system/data/processed/processed_chunks.jsonl
+    - rag_system/retrieval/embedder.py
+    outs:
+    - rag_system/data/processed/embeddings
+    metrics:
+    - rag_system/data/processed/embedding_stats.json:
+        cache: false
+  build_index:
+    cmd: python rag_system/scripts/build_index.py
+    deps:
+    - rag_system/data/processed/embeddings
+    - rag_system/data/processed/metadata.json
+    - rag_system/data/processed/processed_chunks.jsonl
+    - rag_system/scripts/build_index.py
+    outs:
+    - rag_system/retrieval/index
