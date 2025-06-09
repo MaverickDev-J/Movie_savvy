@@ -862,7 +862,7 @@ class SmartRedditScraperBotWithEmbeddings:
         self.similarity_threshold = 0.6
         self.plot_relevance_threshold = 30
         logger.info("Initializing Reddit scraper...")
-        self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+        self.embedding_model = SentenceTransformer('intfloat/e5-base-v2')
         logger.info("Embedding model loaded successfully")
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
@@ -1026,7 +1026,7 @@ class SmartRedditScraperBotWithEmbeddings:
 
 if __name__ == "__main__":
     bot = SmartRedditScraperBotWithEmbeddings()
-    queries = ["explain the ending of inception"]
+    queries = ["explain the ending of squid game"]
     for query in queries:
         logger.info(f"Processing query: '{query}'")
         result = bot.search_and_preprocess_with_embeddings(query, num_posts=config["reddit"]["scraper"]["max_posts"])

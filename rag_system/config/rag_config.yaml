@@ -9,8 +9,8 @@ system:
 
 # Data Configuration
 data:
-  raw_dir: "data/raw"
-  processed_dir: "data/processed"
+  raw_dir: "rag_system/data/raw"
+  processed_dir: "rag_system/data/processed"
   reddit_dir: "data/processed/reddit_data"  # Directory for Reddit data
   categories:
     - "anime"
@@ -25,6 +25,8 @@ data:
     output_file: "processed_chunks.jsonl"
     metadata_file: "metadata.json"
     log_file: "preprocess_log.txt"
+    stats_file: "processing_stats.json"  # Added for preprocessing metrics
+    embedding_stats_file: "embedding_stats.json"  # Added for embedding metrics
 
 # Reddit Configuration
 reddit:
@@ -43,15 +45,15 @@ reddit:
 
 # Retrieval Configuration
 retrieval:
-  embedding_model: "all-MiniLM-L6-v2"
-  embedding_dimension: 384
+  embedding_model: "intfloat/e5-base-v2"  # Updated to match embedder.py and retriever.py
+  embedding_dimension: 768  # Updated for e5-base-v2
   index:
     type: "faiss"
     index_file: "index.bin"
     metadata_file: "index_metadata.json"
     save_dir: "retrieval/index"
-  top_k: 8
-  similarity_threshold: 0.3  # Adjusted to match run_rag.py Reddit fallback
+  top_k: 5
+  similarity_threshold: 0.3
   max_retrieved_tokens: 3000
 
 # Generation Configuration
@@ -66,13 +68,13 @@ generation:
     max_new_tokens: 512
     temperature: 0.7
     top_k: 60
-    repetition_penalty: 1.2
+    repetition_penalty: 1.4
     do_sample: true
     quantize: null
   prompt:
     template_dir: "generation/prompt_templates"
-    default_prompt_file: "rag_prompt.txt"  # Updated: Changed from default_template
-    reddit_prompt_file: "rag_reddit_prompt.txt"  # Updated: Changed from reddit_template
+    default_prompt_file: "rag_prompt.txt"
+    reddit_prompt_file: "rag_reddit_prompt.txt"
     style: "movie_savvy"
     max_context_length: 8192
   history_window: 5
@@ -85,7 +87,7 @@ pipeline:
     level: "INFO"
     log_dir: "output/logs"
     log_file: "rag_pipeline.log"
-    reddit_log_file: "reddit_pipeline.log"  # Reddit-specific logging
+    reddit_log_file: "reddit_pipeline.log"
   output:
     results_dir: "output/results"
     save_intermediate: true
@@ -106,7 +108,7 @@ validation:
     - "Find anime similar to Berserk with dark themes"
     - "Compare Monkey D. Luffy and Eren Yeager character development"
     - "How does Pushpa Raj evolve in Pushpa 2: The Rule"
-    - "What do people think about Train to Busan on Reddit"  # Reddit-triggered query
+    - "What do people think about Train to Busan on Reddit"
   metrics:
     - "retrieval_time"
     - "generation_time"
