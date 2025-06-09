@@ -1,5 +1,4 @@
 [core]
-    remote = gdrive-storage
+    remote = storage
 ['remote "storage"']
     url = /teamspace/studios/this_studio/dvc-backup
-
