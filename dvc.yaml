@@ -1,0 +1,13 @@
+stages:
+  preprocess:
+    cmd: python rag_system/scripts/preprocess_data.py
+    deps:
+    - rag_system/config/rag_config.yaml
+    - rag_system/data/raw
+    - rag_system/scripts/preprocess_data.py
+    outs:
+    - rag_system/data/processed/metadata.json
+    - rag_system/data/processed/processed_chunks.jsonl
+    metrics:
+    - rag_system/data/processed/processing_stats.json:
+        cache: false
