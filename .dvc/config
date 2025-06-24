@@ -1,0 +1,6 @@
+[core]
+    remote = storage
+[cache]
+    dir = cache
+['remote "storage"']
+    url = /teamspace/studios/this_studio/dvc-backup

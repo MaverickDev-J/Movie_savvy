@@ -1,0 +1,99 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python rag_system/scripts/preprocess_data.py
+    deps:
+    - path: rag_system/config/rag_config.yaml
+      hash: md5
+      md5: 1742d49a409c97efac436900f3437e62
+      size: 2390
+      isexec: true
+    - path: rag_system/data/raw
+      hash: md5
+      md5: f02866c744a2380601b240d2cd476565.dir
+      size: 781847791
+      nfiles: 6
+    - path: rag_system/scripts/preprocess_data.py
+      hash: md5
+      md5: 4c1be93f535badf90a02899c96329aa8
+      size: 27010
+      isexec: true
+    outs:
+    - path: rag_system/data/processed/metadata.json
+      hash: md5
+      md5: d4b7bdd25d387ff3b12c30f7bce85781
+      size: 10998066
+    - path: rag_system/data/processed/processed_chunks.jsonl
+      hash: md5
+      md5: 865207197c43640be081bb30020f1b3f
+      size: 1006955949
+    - path: rag_system/data/processed/processing_stats.json
+      hash: md5
+      md5: 34c9b3d2963d7e499740ed070c65d133
+      size: 321
+  embed:
+    cmd: python rag_system/retrieval/embedder.py
+    deps:
+    - path: rag_system/config/rag_config.yaml
+      hash: md5
+      md5: 1742d49a409c97efac436900f3437e62
+      size: 2390
+      isexec: true
+    - path: rag_system/data/processed/metadata.json
+      hash: md5
+      md5: 443499b15dfdc0d31e3a6d567be339bd
+      size: 140503845
+    - path: rag_system/data/processed/processed_chunks.jsonl
+      hash: md5
+      md5: 865207197c43640be081bb30020f1b3f
+      size: 1006955949
+    - path: rag_system/retrieval/embedder.py
+      hash: md5
+      md5: 8776190505ac63f87d8b796a7acea15b
+      size: 13476
+      isexec: true
+    outs:
+    - path: rag_system/data/processed/embedding_stats.json
+      hash: md5
+      md5: 14be52aec1d0f7bea816e0bf4cf108e2
+      size: 36
+    - path: rag_system/data/processed/embeddings
+      hash: md5
+      md5: 73ccdceb410c6f619b721a3b32088cb9.dir
+      size: 1935929088
+      nfiles: 6
+  build_index:
+    cmd: python rag_system/scripts/build_index.py
+    deps:
+    - path: rag_system/config/rag_config.yaml
+      hash: md5
+      md5: 1742d49a409c97efac436900f3437e62
+      size: 2390
+      isexec: true
+    - path: rag_system/data/processed/embeddings
+      hash: md5
+      md5: 73ccdceb410c6f619b721a3b32088cb9.dir
+      size: 1935929088
+      nfiles: 6
+    - path: rag_system/data/processed/metadata.json
+      hash: md5
+      md5: a092419352da8cbf54e69e107d9aa553
+      size: 151266843
+    - path: rag_system/data/processed/processed_chunks.jsonl
+      hash: md5
+      md5: 865207197c43640be081bb30020f1b3f
+      size: 1006955949
+    - path: rag_system/scripts/build_index.py
+      hash: md5
+      md5: 296ede7fc8ca8c633c34d1cda5e4488d
+      size: 7062
+      isexec: true
+    outs:
+    - path: rag_system/retrieval/index/index.bin
+      hash: md5
+      md5: e4e9272819b0ecfbe9ed8de26a07c019
+      size: 1935928365
+    - path: rag_system/retrieval/index/index_metadata.json
+      hash: md5
+      md5: a5455d91f53e53c05f4d135d072e1e0a
+      size: 74436776

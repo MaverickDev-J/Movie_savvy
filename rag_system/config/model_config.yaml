@@ -1,0 +1,146 @@
+# Model Configuration for Fine-tuned Mistral-7B
+# Configuration for the entertainment-specialized model
+
+# Base Model Information
+base_model:
+  name: "mistralai/Mistral-7B-v0.1"
+  architecture: "mistral"
+  parameters: "7B"
+  context_length: 32768
+  vocab_size: 32000
+
+# Fine-tuned Model Settings
+fine_tuned_model:
+  name: "mistral-7b-entertainment"
+  path: "models/mistral-7b-finetuned"
+  specialization: "entertainment_content"
+  training_data: "custom_entertainment_dataset"
+  
+  # Model files
+  files:
+    checkpoint: "lit_model.pth"
+    lora_weights: "lit_model.pth.lora"  # Versioned with DVC
+    config: "config.json"
+    generation_config: "generation_config.json"
+    tokenizer: "tokenizer.json"
+    tokenizer_model: "tokenizer.model"
+    tokenizer_config: "tokenizer_config.json"
+    hyperparameters: "hyperparameters.yaml"
+    model_config: "model_config.yaml"
+    prompt_style: "prompt_style.yaml"
+
+# LoRA Configuration
+lora:
+  r: 32
+  alpha: 16
+  dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "v_proj"
+  
+  # Module settings
+  query: true
+  key: false
+  value: true
+  projection: false
+  mlp: false
+  head: false
+
+# Quantization Settings
+quantization:
+  method: null  # Disabled for L40S bf16 inference
+  compute_dtype: "bf16"
+  use_nested_quant: false
+
+# Generation Parameters
+generation:
+  # Default parameters
+  default:
+    max_new_tokens: 1024
+    temperature: 0.7
+    top_k: 50  # CHANGED: Removed top_p, kept only top_k for LitGPT compatibility
+    repetition_penalty: 1.2
+    do_sample: true
+    pad_token_id: 2
+    eos_token_id: 2
+  
+  # Task-specific parameters
+  creative_writing:
+    temperature: 0.8
+    top_k: 40  # CHANGED: Replaced top_p with top_k
+    repetition_penalty: 1.05
+  factual_qa:
+    temperature: 0.3
+    top_k: 30  # CHANGED: Replaced top_p with top_k
+    repetition_penalty: 1.2
+  recommendation:
+    temperature: 0.4
+    top_k: 30  # CHANGED: Replaced top_p with top_k
+    repetition_penalty: 1.1
+
+# Training Configuration (for reference)
+training:
+  precision: "bf16-true"
+  devices: 1
+  global_batch_size: 16
+  micro_batch_size: 4
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  epochs: 1
+  max_seq_length: 1024
+  lr_warmup_steps: 100
+  data_format: "alpaca"
+  mask_prompt: false
+  ignore_index: -100
+  seed: 42
+
+# Model Capabilities
+capabilities:
+  domains:
+    - "anime_manga"
+    - "bollywood"
+    - "hollywood" 
+    - "korean_content"
+    - "tv_shows"
+    - "streaming_content"
+  tasks:
+    - "content_recommendation"
+    - "character_analysis"
+    - "plot_comparison"
+    - "genre_classification"
+    - "review_generation"
+    - "trivia_qa"
+
+# Performance Settings
+performance:
+  gradient_checkpointing: true
+  use_cache: true
+  low_cpu_mem_usage: true
+  torch_dtype: "bfloat16"
+  device_map: "cuda"  # Explicit for L40S
+  max_memory: "32GB"  # Increased for L40S 48GB VRAM
+
+# Tokenizer Settings
+tokenizer:
+  model_max_length: 32768
+  padding_side: "left"
+  truncation_side: "left"
+  add_eos_token: true
+  add_bos_token: true
+  special_tokens:
+    pad_token: "<pad>"
+    eos_token: "</s>"
+    bos_token: "<s>"
+    unk_token: "<unk>"
+
+# Model Loading Settings
+loading:
+  max_position_embeddings: 32768  # Ensure full context support
+  rope_scaling: null 
+  use_litgpt: true
+  fabric_accelerator: "cuda"  # Explicit for L40S
+  fabric_devices: 1
+  torch_load_fallback: true
+  strict_loading: false
+  retry_attempts: 3
+  timeout_seconds: 300
