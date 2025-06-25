@@ -16,28 +16,25 @@ data:
     stats_file: processing_stats.json
   processed_dir: rag_system/data/processed
   raw_dir: rag_system/data/raw
-  reddit_dir: data/processed/reddit_data
+
 generation:
   history_window: 5
   model:
-    checkpoint_file: lit_model.pth
-    config_file: config.json
-    lora_file: lit_model.pth.lora
-    name: mistral-7b-finetuned
-    path: models/mistral-7b-finetuned
+    name: "mistralai/Mistral-7B-Instruct-v0.3"
+    path: null  # Uses Hugging Face cache
   parameters:
     do_sample: true
     max_new_tokens: 1024
     quantize: null
     repetition_penalty: 1.2
-    temperature: 0.7
+    temperature: 0.6
     top_k: 50
   prompt:
     default_prompt_file: rag_prompt.txt
     max_context_length: 16384
-    reddit_prompt_file: rag_reddit_prompt.txt
     style: movie_savvy
     template_dir: generation/prompt_templates
+
 performance:
   cache_embeddings: true
   cache_retrievals: false
@@ -45,31 +42,19 @@ performance:
   max_memory_mb: 8192
   multiprocessing: false
   num_workers: 4
+
 pipeline:
   batch_size: 1
   logging:
     level: INFO
     log_dir: output/logs
     log_file: rag_pipeline.log
-    reddit_log_file: reddit_pipeline.log
   output:
     result_format: json
     results_dir: output/results
     save_intermediate: true
   timeout: 300
-reddit:
-  scraper:
-    embedding_cache: true
-    log_file: reddit_scraper.log
-    max_posts: 2
-    output_file: reddit_results.jsonl
-  trigger_keywords:
-  - reddit
-  - discussion
-  - people think
-  - community
-  - opinions
-  - users say
+
 retrieval:
   embedding_dimension: 1024
   embedding_model: intfloat/e5-large-v2
@@ -81,10 +66,25 @@ retrieval:
   max_retrieved_tokens: 4000
   similarity_threshold: 0.4
   top_k: 4
+  web_search:
+  priority_threshold: 0.5  # Similarity threshold for web search fallback
+  max_web_results: 5
+  web_content_length: 1000
+  explicit_web_keywords:
+    - "latest"
+    - "current" 
+    - "recent"
+    - "today"
+    - "news"
+    - "update"
+    - "trending"
+
+
 system:
-  description: Movie-savvy RAG system with Reddit integration for entertainment queries
+  description: Movie-savvy RAG system for entertainment queries
   name: Entertainment RAG System
-  version: '1.1'
+  version: '1.2'
+
 validation:
   metrics:
   - retrieval_time
@@ -95,4 +95,3 @@ validation:
   - Find anime similar to Berserk with dark themes
   - Compare Monkey D. Luffy and Eren Yeager character development
   - 'How does Pushpa Raj evolve in Pushpa 2: The Rule'
-  - What do people think about Train to Busan on Reddit

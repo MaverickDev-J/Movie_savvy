@@ -5,8 +5,8 @@ stages:
     deps:
     - path: rag_system/config/rag_config.yaml
       hash: md5
-      md5: 1742d49a409c97efac436900f3437e62
-      size: 2390
+      md5: 287ee33d15312dd7b7a07e7e7131de0c
+      size: 1874
       isexec: true
     - path: rag_system/data/raw
       hash: md5
@@ -21,11 +21,11 @@ stages:
     outs:
     - path: rag_system/data/processed/metadata.json
       hash: md5
-      md5: d4b7bdd25d387ff3b12c30f7bce85781
+      md5: 9cc309bcb97618630e1c17d93c12e21f
       size: 10998066
     - path: rag_system/data/processed/processed_chunks.jsonl
       hash: md5
-      md5: 865207197c43640be081bb30020f1b3f
+      md5: c9f99d24c1ee3ae23f90e34b23a1e848
       size: 1006955949
     - path: rag_system/data/processed/processing_stats.json
       hash: md5
@@ -36,21 +36,21 @@ stages:
     deps:
     - path: rag_system/config/rag_config.yaml
       hash: md5
-      md5: 1742d49a409c97efac436900f3437e62
-      size: 2390
+      md5: 287ee33d15312dd7b7a07e7e7131de0c
+      size: 1874
       isexec: true
     - path: rag_system/data/processed/metadata.json
       hash: md5
-      md5: 443499b15dfdc0d31e3a6d567be339bd
-      size: 140503845
+      md5: 4fa8e3d8a8bd339eaaf1d6e184155125
+      size: 140503846
     - path: rag_system/data/processed/processed_chunks.jsonl
       hash: md5
-      md5: 865207197c43640be081bb30020f1b3f
+      md5: c9f99d24c1ee3ae23f90e34b23a1e848
       size: 1006955949
     - path: rag_system/retrieval/embedder.py
       hash: md5
-      md5: 8776190505ac63f87d8b796a7acea15b
-      size: 13476
+      md5: 3c97a67a553e01498abbe085ba2ec779
+      size: 21380
       isexec: true
     outs:
     - path: rag_system/data/processed/embedding_stats.json
@@ -59,29 +59,29 @@ stages:
       size: 36
     - path: rag_system/data/processed/embeddings
       hash: md5
-      md5: 73ccdceb410c6f619b721a3b32088cb9.dir
-      size: 1935929088
+      md5: a526c35db20e751ddea4dab481e4c12c.dir
+      size: 2581238528
       nfiles: 6
   build_index:
     cmd: python rag_system/scripts/build_index.py
     deps:
     - path: rag_system/config/rag_config.yaml
       hash: md5
-      md5: 1742d49a409c97efac436900f3437e62
-      size: 2390
+      md5: 287ee33d15312dd7b7a07e7e7131de0c
+      size: 1874
       isexec: true
     - path: rag_system/data/processed/embeddings
       hash: md5
-      md5: 73ccdceb410c6f619b721a3b32088cb9.dir
-      size: 1935929088
+      md5: a526c35db20e751ddea4dab481e4c12c.dir
+      size: 2581238528
       nfiles: 6
     - path: rag_system/data/processed/metadata.json
       hash: md5
-      md5: a092419352da8cbf54e69e107d9aa553
-      size: 151266843
+      md5: 9c0fb0c8debbb4ff73cd5ce23742b4cf
+      size: 151266844
     - path: rag_system/data/processed/processed_chunks.jsonl
       hash: md5
-      md5: 865207197c43640be081bb30020f1b3f
+      md5: c9f99d24c1ee3ae23f90e34b23a1e848
       size: 1006955949
     - path: rag_system/scripts/build_index.py
       hash: md5
@@ -91,9 +91,35 @@ stages:
     outs:
     - path: rag_system/retrieval/index/index.bin
       hash: md5
-      md5: e4e9272819b0ecfbe9ed8de26a07c019
-      size: 1935928365
+      md5: 522f61e3bad86157d86c7341e971d06b
+      size: 2581237805
     - path: rag_system/retrieval/index/index_metadata.json
       hash: md5
-      md5: a5455d91f53e53c05f4d135d072e1e0a
+      md5: 5759871d4d3330d4222c5b8c5a1bc5d3
       size: 74436776
+  validate:
+    cmd: python rag_system/retrieval/retriever.py --query "best anime like berserk
+      recommendation" --top_k 5
+    deps:
+    - path: rag_system/config/rag_config.yaml
+      hash: md5
+      md5: 287ee33d15312dd7b7a07e7e7131de0c
+      size: 1874
+      isexec: true
+    - path: rag_system/data/processed/processed_chunks.jsonl
+      hash: md5
+      md5: c9f99d24c1ee3ae23f90e34b23a1e848
+      size: 1006955949
+    - path: rag_system/retrieval/index/index.bin
+      hash: md5
+      md5: 522f61e3bad86157d86c7341e971d06b
+      size: 2581237805
+    - path: rag_system/retrieval/index/index_metadata.json
+      hash: md5
+      md5: 5759871d4d3330d4222c5b8c5a1bc5d3
+      size: 74436776
+    - path: rag_system/retrieval/retriever.py
+      hash: md5
+      md5: 9824ed4df66e234f65f8754f80226aee
+      size: 29892
+      isexec: true

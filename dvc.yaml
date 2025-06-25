@@ -33,23 +33,6 @@ stages:
       - rag_system/retrieval/index/index.bin
       - rag_system/retrieval/index/index_metadata.json
 
-  evaluate_embedding_models:
-    cmd: python rag_system/scripts/evaluate_embedding_models.py
-    deps:
-      - rag_system/config/rag_config.yaml
-      - rag_system/data/test_queries.json
-      - rag_system/data/processed/metadata.json
-      - rag_system/data/processed/processed_chunks.jsonl
-      - rag_system/data/processed/embeddings
-      - rag_system/retrieval/index/index.bin
-      - rag_system/retrieval/index/index_metadata.json
-      - rag_system/scripts/evaluate_embedding_models.py
-      - rag_system/scripts/run_rag.py
-      - rag_system/retrieval/retriever.py
-      - rag_system/generation/generator.py
-    outs:
-      - rag_system/output/evaluation
-
   validate:
     cmd: python rag_system/retrieval/retriever.py --query "best anime like berserk recommendation" --top_k 5
     deps:

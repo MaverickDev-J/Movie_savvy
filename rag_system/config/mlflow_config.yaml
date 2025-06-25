@@ -1,3 +1,0 @@
-mlflow:
-  tracking_uri: "file:rag_system/output/mlruns"
-  experiment_name: "EmbeddingModelComparison"
