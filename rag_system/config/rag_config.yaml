@@ -72,12 +72,17 @@ retrieval:
   web_content_length: 1000
   explicit_web_keywords:
     - "latest"
-    - "current" 
+    - "current"
     - "recent"
     - "today"
-    - "news"
-    - "update"
-    - "trending"
+    - "near"
+    - "closest"
+    - "book"
+    - "where can I"
+    - "location"
+    - "nearby"
+    - "available at"
+
 
 
 system:
