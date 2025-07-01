@@ -1,0 +1,84 @@
+# rag_system/experiments/config/experiment_config.yaml
+
+mlflow:
+  tracking_uri: "file:///teamspace/studios/this_studio/rag_system/mlruns"
+  experiment_name: "RAG_System_Experiments"
+  artifact_location: "/teamspace/studios/this_studio/rag_system/mlruns"
+
+experiments:
+  retrieval_optimization:
+    name: "Retrieval Parameter Tuning"
+    parameters:
+      top_k: [ 5, 6, 8]
+      similarity_threshold: [ 0.4, 0.5, 0.6]
+    
+  generation_optimization:
+    name: "Generation Parameter Tuning"
+    parameters:
+      temperature: [ 0.6, 0.8, 1.0]
+      max_new_tokens: [512, 768, 1024, 1536]
+      top_k_sampling: [ 50, 70, 100]
+      repetition_penalty: [1.0, 1.1, 1.2, 1.3]
+    
+  hybrid_optimization:
+    name: "End-to-End Pipeline Optimization"
+    parameters:
+      web_search_threshold: [0.4, 0.5, 0.6]
+      context_mixing_ratio: [0.3, 0.5, 0.7]
+
+metrics:
+  retrieval:
+    - retrieval_time
+    - chunks_retrieved_count
+    - avg_similarity_score
+    - similarity_variance
+    - context_diversity
+    - source_distribution
+    
+  generation:
+    - generation_time
+    - response_length
+    - response_coherence
+    - response_relevance
+    - repetition_score
+    - fluency_score
+    
+  ragas:
+    - faithfulness
+    - answer_relevancy
+    - context_precision
+    - context_recall
+    - context_entity_recall
+    
+  system:
+    - total_pipeline_time
+    - memory_usage
+    - gpu_utilization
+    - tokens_per_second
+    - cache_hit_rate
+
+test_queries:
+  factual:
+    - "Explain the ending of Attack on Titan manga"
+
+  opinion:
+    - "What makes One Piece's world-building better than other anime?"
+
+  current:
+    - "Current trending K-dramas"
+
+  recommendation:
+    - "Recommend anime similar to Death Note"
+    - "Bollywood movies similar to 3 Idiots"
+
+
+# Default parameters (loaded from your existing config)
+default_parameters:
+  retrieval:
+    top_k: 5
+    similarity_threshold: 0.5
+  generation:
+    temperature: 0.7
+    max_new_tokens: 1024
+    top_k_sampling: 50
+    repetition_penalty: 1.1

@@ -63,7 +63,6 @@ checkpoints/
 
 # ─── Backup directories ────────────────────────────────────────────────────────
 dvc-backup/
-experiments/
 nltk_data/
 
 
@@ -78,3 +77,14 @@ rag_system/mlruns/
 .cursor-server
 .vscode-server
 .windsurf-server
+
+
+# Allow specific files inside rag_system/experiments/
+!rag_system/experiments/run_experiments.py
+!rag_system/experiments/config/experiment_config.yaml
+!rag_system/experiments/metrics/
+!rag_system/experiments/metrics/*.py
+!rag_system/experiments/tracking/
+!rag_system/experiments/tracking/*.py
+!rag_system/experiments/utils/
+!rag_system/experiments/utils/*.py
