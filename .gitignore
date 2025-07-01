@@ -63,12 +63,16 @@ checkpoints/
 
 # ─── Backup directories ────────────────────────────────────────────────────────
 dvc-backup/
+experiments/
+nltk_data/
+
 
 # ─── LLM Fine-tuning directory ─────────────────────────────────────────────────
 llm-finetune/
 
 # ─── Utils directory (if you want to keep it untracked) ────────────────────────
 rag_system/utils/
+rag_system/mlruns/
 
 # ─── Development servers and tools ─────────────────────────────────────────────
 .cursor-server

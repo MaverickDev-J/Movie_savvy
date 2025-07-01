@@ -26,9 +26,9 @@ generation:
     do_sample: true
     max_new_tokens: 1024
     quantize: null
-    repetition_penalty: 1.2
+    repetition_penalty: 1.1
     temperature: 0.6
-    top_k: 50
+    top_k: 70
   prompt:
     default_prompt_file: rag_prompt.txt
     max_context_length: 16384
@@ -64,8 +64,8 @@ retrieval:
     save_dir: retrieval/index
     type: faiss
   max_retrieved_tokens: 4000
-  similarity_threshold: 0.4
-  top_k: 4
+  similarity_threshold: 0.6
+  top_k: 8
   web_search:
   priority_threshold: 0.5  # Similarity threshold for web search fallback
   max_web_results: 5
