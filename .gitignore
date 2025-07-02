@@ -63,6 +63,7 @@ checkpoints/
 
 # ─── Backup directories ────────────────────────────────────────────────────────
 dvc-backup/
+experiments/logs
 nltk_data/
 
 

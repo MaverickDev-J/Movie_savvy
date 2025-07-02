@@ -17,6 +17,20 @@ data:
   processed_dir: rag_system/data/processed
   raw_dir: rag_system/data/raw
 
+# youtube:
+#   api_key: "AIzaSyCZomDT0LCOEmUok4GnsA0txThR76Md9hU"  # Replace with your actual API key
+#   max_results: 3
+#   max_transcript_tokens: 2500
+
+
+youtube:
+  search_api_key: "AIzaSyCnMBnx4l3x5gWv-puVErKgwGrTAKHmFAY"  # YouTube Data API key for searching videos
+  transcript_api_key: "SG2t3x5HGEjqzn217xnHFo76"  # SearchAPI.io API key for fetching transcripts
+  max_results: 2  # Number of videos to fetch
+
+
+
+
 generation:
   history_window: 5
   model:

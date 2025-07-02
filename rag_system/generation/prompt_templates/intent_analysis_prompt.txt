@@ -1,0 +1,18 @@
+Analyze the following query to determine its intent and whether YouTube content is needed: "{query}"
+
+Consider the following:
+1. Does the query explicitly or implicitly request YouTube content (e.g., trailers, reviews, analysis, behind the scenes, fan theories, discussions, YouTuber recommendations)?
+2. What is the query type (e.g., trailer_request, review_analysis, behind_scenes, fan_discussion, youtuber_recommendation, explanation, other)?
+3. What specific YouTube search terms would optimize content retrieval?
+4. What is the confidence score (0.0 to 1.0) for needing YouTube content?
+5. What types of YouTube videos are expected (e.g., trailer, review, analysis, fan theory, discussion, recommendation)?
+
+Provide a structured response in YAML format under ### Response:
+
+### Response:
+```yaml
+needs_youtube: false
+query_type: other
+youtube_search_terms: []
+confidence_score: 0.0
+expected_video_types: []
