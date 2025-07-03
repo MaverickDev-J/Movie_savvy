@@ -1,116 +1,98 @@
-# RAG System Configuration
-# Main configuration file for the entertainment RAG system
-
-# System Settings
-system:
-  name: "Entertainment RAG System"
-  version: "1.1"
-  description: "Movie-savvy RAG system with Reddit integration for entertainment queries"
-
-# Data Configuration
 data:
-  raw_dir: "rag_system/data/raw"
-  processed_dir: "rag_system/data/processed"
-  reddit_dir: "data/processed/reddit_data"  # Directory for Reddit data
   categories:
-    - "anime"
-    - "manga"
-    - "bollywood"
-    - "hollywood"
-    - "kdrama"
-    - "kmovie"
+  - anime
+  - manga
+  - bollywood
+  - hollywood
+  - kdrama
+  - kmovie
   preprocessing:
-    chunk_size: 512
     chunk_overlap: 50
-    output_file: "processed_chunks.jsonl"
-    metadata_file: "metadata.json"
-    log_file: "preprocess_log.txt"
-    stats_file: "processing_stats.json"  # Added for preprocessing metrics
-    embedding_stats_file: "embedding_stats.json"  # Added for embedding metrics
-
-# Reddit Configuration
-reddit:
-  trigger_keywords:
-    - "reddit"
-    - "discussion"
-    - "people think"
-    - "community"
-    - "opinions"
-    - "users say"
-  scraper:
-    max_posts: 3  # Number of Reddit posts to retrieve
-    output_file: "reddit_results.jsonl"  # Output for scraped data
-    log_file: "reddit_scraper.log"  # Reddit-specific logging
-    embedding_cache: true  # Use in-memory embeddings for speed
-
-# Retrieval Configuration
-retrieval:
-  embedding_model: "intfloat/e5-base-v2"  # Updated to match embedder.py and retriever.py
-  embedding_dimension: 768  # Updated for e5-base-v2
-  index:
-    type: "faiss"
-    index_file: "index.bin"
-    metadata_file: "index_metadata.json"
-    save_dir: "retrieval/index"
-  top_k: 5
-  similarity_threshold: 0.3
-  max_retrieved_tokens: 3000
-
-# Generation Configuration
+    chunk_size: 512
+    embedding_stats_file: embedding_stats.json
+    log_file: preprocess_log.txt
+    metadata_file: metadata.json
+    output_file: processed_chunks.jsonl
+    stats_file: processing_stats.json
+  processed_dir: rag_system/data/processed
+  raw_dir: rag_system/data/raw
+  reddit_dir: data/processed/reddit_data
 generation:
-  model:
-    name: "mistral-7b-finetuned"
-    path: "models/mistral-7b-finetuned"
-    checkpoint_file: "lit_model.pth"
-    lora_file: "lit_model.pth.lora"
-    config_file: "config.json"
-  parameters:
-    max_new_tokens: 512
-    temperature: 0.7
-    top_k: 60
-    repetition_penalty: 1.4
-    do_sample: true
-    quantize: null
-  prompt:
-    template_dir: "generation/prompt_templates"
-    default_prompt_file: "rag_prompt.txt"
-    reddit_prompt_file: "rag_reddit_prompt.txt"
-    style: "movie_savvy"
-    max_context_length: 8192
   history_window: 5
-
-# Pipeline Configuration
-pipeline:
-  batch_size: 1
-  timeout: 300
-  logging:
-    level: "INFO"
-    log_dir: "output/logs"
-    log_file: "rag_pipeline.log"
-    reddit_log_file: "reddit_pipeline.log"
-  output:
-    results_dir: "output/results"
-    save_intermediate: true
-    result_format: "json"
-
-# Performance Settings
+  model:
+    checkpoint_file: lit_model.pth
+    config_file: config.json
+    lora_file: lit_model.pth.lora
+    name: mistral-7b-finetuned
+    path: models/mistral-7b-finetuned
+  parameters:
+    do_sample: true
+    max_new_tokens: 1024
+    quantize: null
+    repetition_penalty: 1.2
+    temperature: 0.7
+    top_k: 50
+  prompt:
+    default_prompt_file: rag_prompt.txt
+    max_context_length: 16384
+    reddit_prompt_file: rag_reddit_prompt.txt
+    style: movie_savvy
+    template_dir: generation/prompt_templates
 performance:
-  device: "cuda"
-  max_memory_mb: 4096
   cache_embeddings: true
   cache_retrievals: false
-  num_workers: 4
+  device: cuda
+  max_memory_mb: 8192
   multiprocessing: false
-
-# Validation Settings
+  num_workers: 4
+pipeline:
+  batch_size: 1
+  logging:
+    level: INFO
+    log_dir: output/logs
+    log_file: rag_pipeline.log
+    reddit_log_file: reddit_pipeline.log
+  output:
+    result_format: json
+    results_dir: output/results
+    save_intermediate: true
+  timeout: 300
+reddit:
+  scraper:
+    embedding_cache: true
+    log_file: reddit_scraper.log
+    max_posts: 2
+    output_file: reddit_results.jsonl
+  trigger_keywords:
+  - reddit
+  - discussion
+  - people think
+  - community
+  - opinions
+  - users say
+retrieval:
+  embedding_dimension: 1024
+  embedding_model: intfloat/e5-large-v2
+  index:
+    index_file: index.bin
+    metadata_file: index_metadata.json
+    save_dir: retrieval/index
+    type: faiss
+  max_retrieved_tokens: 4000
+  similarity_threshold: 0.4
+  top_k: 4
+system:
+  description: Movie-savvy RAG system with Reddit integration for entertainment queries
+  name: Entertainment RAG System
+  version: '1.1'
 validation:
-  test_queries:
-    - "Find anime similar to Berserk with dark themes"
-    - "Compare Monkey D. Luffy and Eren Yeager character development"
-    - "How does Pushpa Raj evolve in Pushpa 2: The Rule"
-    - "What do people think about Train to Busan on Reddit"
   metrics:
-    - "retrieval_time"
-    - "generation_time"
-    - "total_time"
-    - "relevance_score"
+  - retrieval_time
+  - generation_time
+  - total_time
+  - relevance_score
+  test_queries:
+  - Find anime similar to Berserk with dark themes
+  - Compare Monkey D. Luffy and Eren Yeager character development
+  - 'How does Pushpa Raj evolve in Pushpa 2: The Rule'
+  - What do people think about Train to Busan on Reddit

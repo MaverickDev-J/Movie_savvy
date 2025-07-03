@@ -1,7 +1,5 @@
 {
-  "architectures": [
-    "MistralForCausalLM"
-  ],
+  "architectures": ["MistralForCausalLM"],
   "bos_token_id": 1,
   "eos_token_id": 2,
   "hidden_act": "silu",
