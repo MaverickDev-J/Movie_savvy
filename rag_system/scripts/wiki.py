@@ -182,7 +182,7 @@ def scrape_wikipedia_page(url):
     return movie_data
 
 def main():
-    api_key = "c7c317fbf5e57ad58493310afcd33d30abd3c75f"
+    api_key = ""
     title = input("Enter the search title (e.g., dangal): ")
     
     # First, use Serper API to find Wikipedia link
