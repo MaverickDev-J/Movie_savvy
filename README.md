@@ -36,6 +36,20 @@ The project is organized as follows:
 
 ---
 
+## Data Generation
+
+Raw data (e.g., IMDb, MDL) was scraped and then passed to **Gemini 2.0 Flash** to generate high-quality Alpaca-style instruction-output pairs for fine-tuning.
+
+### Example Scraped Data (bollywood.json)
+
+![Scraped Movie Example - bollywood.json](media/scraped_bollywood_example.jpg)
+
+### Generated Alpaca-Style Data (train.jsonl)
+
+![Alpaca Style Data - train.jsonl](media/generated_alpaca_data.jpg)
+
+---
+
 ## Setup Instructions
 
 ### Prerequisites
@@ -126,6 +140,10 @@ The Mistral 7B v0.1 model was fine-tuned using LitGPT on a synthetic dataset of 
 - **Training**: Batch size=16, learning rate=0.0001, 1 epoch, `bf16` precision.
 - **Data**: Alpaca-style JSON dataset in `data/custom/`.
 - Config: `configs/mistral-7b-custom-data.yaml`.
+
+![Fine-Tuning Log](media/finetune_log.jpg)
+*A snapshot of the fine-tuning log showing progress, training loss, validation loss, and memory usage during Lit-GPT-based fine-tuning on custom data.*
+
 
 See [LitGPT documentation](https://github.com/Lightning-AI/litgpt) for details.
 
