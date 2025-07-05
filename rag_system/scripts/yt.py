@@ -489,8 +489,8 @@ def save_transcript_to_file(result, video_title="", video_stats=None):
     return filename
 
 # Configuration - Replace with your API keys
-SERPER_API_KEY = "a4dcbd563f45b80c87043f0ade64988aeea07851"  # Your existing Serper key
-SERPAPI_KEY = "0dc301fa5b2564eef6aee907a4521c26e2b61823e934808359778cc45f2eb5da"  # Get from https://serpapi.com/
+SERPER_API_KEY = ""  # Your existing Serper key
+SERPAPI_KEY = ""  # Get from https://serpapi.com/
 # 0dc301fa5b2564eef6aee907a4521c26e2b61823e934808359778cc45f2eb5da
 # Initialize with API keys
 video_search = SerperVideoSearch(SERPER_API_KEY, SERPAPI_KEY)
