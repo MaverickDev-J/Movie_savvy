@@ -26,66 +26,74 @@ env/
 .conda/
 *.env
 
-# ─── DVC-tracked artefacts - keep them ONLY in DVC cache ───────────────────────
+# ─── DVC-tracked artifacts - keep them ONLY in DVC cache ───────────────────────
 rag_system/data/raw/
 rag_system/data/processed/
-rag_system/models/mistral-7b-finetuned/lit_model.pth
-rag_system/models/mistral-7b-finetuned/lit_model.pth.lora
-rag_system/models/mistral-7b-finetuned/tokenizer.model
-rag_system/retrieval/index/
+rag_system/output/index/
 rag_system/output/results/
+rag_system/retrieval/index/
 
 # ─── DVC cache itself (huge blobs) ─────────────────────────────────────────────
 .dvc/cache/
 
-# ─── Lightning AI / ML specific ────────────────────────────────────────────────
-lightning_logs/
-wandb/
-.neptune/
-mlruns/
-checkpoints/
+# ─── ML/AI Models and Training Artifacts ───────────────────────────────────────
+rag_system/models/
 *.ckpt
 *.pth
 *.safetensors
+*.model
+*.lora
+checkpoints/
+
+# ─── ML Experiment Tracking (too large to push) ────────────────────────────────
+mlruns/
+rag_system/mlruns/
+lightning_logs/
+wandb/
+.neptune/
+.mlflow/
+
+# ─── NLTK Data (downloaded resources) ───────────────────────────────────────────
+nltk_data/
+
+# ─── Log Files ──────────────────────────────────────────────────────────────────
+*.log
+output/logs/
+rag_system/output/logs/
+rag_system/rag_system/output/logs/
 
 # ─── Temporary files ───────────────────────────────────────────────────────────
 *.tmp
 *.temp
-.tmp/llm-finetune/
+.tmp/
+temp/
 
-
-# ─── Lightning Studio / Development Tools ──────────────────────────────────────
+# ─── Development Tools and Servers ─────────────────────────────────────────────
 .cursor-server/
-.lesshst
-.lightning_studio/
 .vscode-server/
 .windsurf-server/
+.lightning_studio/
+.lesshst
 
 # ─── Backup directories ────────────────────────────────────────────────────────
 dvc-backup/
-experiments/logs
-nltk_data/
+backup/
+*backup*/
 
-
-# ─── LLM Fine-tuning directory ─────────────────────────────────────────────────
+# ─── Fine-tuning directory ─────────────────────────────────────────────────────
 llm-finetune/
 
-# ─── Utils directory (if you want to keep it untracked) ────────────────────────
-rag_system/utils/
-rag_system/mlruns/
-
-# ─── Development servers and tools ─────────────────────────────────────────────
-.cursor-server
-.vscode-server
-.windsurf-server
-
-
-# Allow specific files inside rag_system/experiments/
+# ─── Keep specific experiment files but ignore logs ────────────────────────────
 !rag_system/experiments/run_experiments.py
-!rag_system/experiments/config/experiment_config.yaml
+!rag_system/experiments/config/
 !rag_system/experiments/metrics/
-!rag_system/experiments/metrics/*.py
 !rag_system/experiments/tracking/
-!rag_system/experiments/tracking/*.py
 !rag_system/experiments/utils/
-!rag_system/experiments/utils/*.py
+rag_system/experiments/logs/
+
+# ─── Allow important config and script files ───────────────────────────────────
+!rag_system/config/
+!rag_system/scripts/
+!rag_system/generation/prompt_templates/
+!dvc.yaml
+!dvc.lock
