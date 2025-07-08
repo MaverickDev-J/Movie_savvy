@@ -10,6 +10,8 @@ from sentence_transformers import SentenceTransformer
 from pathlib import Path
 import argparse
 import re
+from typing import List, Dict
+from rag_system.embeddings.chunk_embeddings import ChunkEmbeddingManager
 from .index_manager import index_manager  # Import the singleton
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -53,59 +55,16 @@ def preprocess_query(query):
     logger.info(f"Preprocessed query: {processed}")
     return processed
 
-async def retrieve(query, top_k=TOP_K):
-    """Retrieve top-k chunks asynchronously using cached index."""
+async def retrieve(query: str, top_k: int = TOP_K) -> List[Dict]:
     try:
-        # Reload config to ensure the latest settings
-        config = load_config()
-        global SIMILARITY_THRESHOLD
-        SIMILARITY_THRESHOLD = config['retrieval']['similarity_threshold']
-        MODEL_NAME = config['retrieval']['embedding_model']
-        
-        # Preprocess query
-        processed_query = preprocess_query(query)
-        logger.info(f"Original query: {query}")
-        
-        # Get cached model (loads once, then reuses)
-        model = await index_manager.get_model()
-        
-        # Add "query: " prefix for E5 models
-        prefix = "query: " if "e5" in MODEL_NAME.lower() else ""
-        query_emb = await asyncio.to_thread(
-            model.encode, [f"{prefix}{processed_query}"], convert_to_numpy=True, normalize_embeddings=True
-        )
-        query_emb = query_emb.astype(np.float32)
-        
-        # Get cached index and data (loads once, then reuses)
-        index, index_metadata, chunks = await index_manager.get_index_and_data()
-        
-        logger.info(f"Searching index for top {top_k} chunks...")
-        distances, indices = await asyncio.to_thread(index.search, query_emb, top_k)
-        
-        results = []
-        for idx, dist in zip(indices[0], distances[0]):
-            if idx >= 0:  # Ensure valid index
-                meta = index_metadata[idx]
-                chunk = chunks.get(meta['chunk_id'])
-                if chunk is None:
-                    logger.warning(f"Chunk with ID {meta['chunk_id']} not found in chunks file")
-                    continue
-                similarity = float(1 - dist)  # Convert distance to similarity
-                if similarity >= SIMILARITY_THRESHOLD:
-                    results.append({
-                        'chunk_id': meta['chunk_id'],
-                        'source': meta['source'],
-                        'text': chunk['text'],
-                        'metadata': chunk['metadata'],
-                        'distance': float(dist),
-                        'similarity': similarity
-                    })
-        
-        logger.info(f"Retrieved {len(results)} chunks for query")
-        return results
+        embedding_manager = ChunkEmbeddingManager()
+        embedding_manager.load_index()
+        chunks = embedding_manager.search_index(query, top_k)
+        logger.info(f"Retrieved {len(chunks)} chunks for query: {query[:50]}...")
+        return chunks
     except Exception as e:
         logger.error(f"Retrieval failed: {e}")
-        return e  # Return exception instead of sys.exit for better error handling
+        return []
 
 # Rest of your code remains the same...
 async def main():

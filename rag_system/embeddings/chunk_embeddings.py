@@ -5,6 +5,7 @@ import faiss
 import numpy as np
 from typing import List, Dict, Tuple
 from sentence_transformers import SentenceTransformer
+import json
 
 # Setup paths
 BASE_DIR = Path(__file__).resolve().parent.parent.parent / "rag_system"
@@ -32,9 +33,12 @@ class ChunkEmbeddingManager:
             self.config = self.load_config()
             self.embedding_model = SentenceTransformer('intfloat/e5-large-v2')
             self.dimension = self.config.get('embedding_dimension', 1024)
-            self.index = faiss.IndexFlatL2(self.dimension)
+            nlist = 100  # Number of clusters for IVF
+            quantizer = faiss.IndexFlatL2(self.dimension)
+            self.index = faiss.IndexIVFFlat(quantizer, self.dimension, nlist, faiss.METRIC_L2)
+            self.index.nprobe = 10  # Number of clusters to search
             self.metadata = []
-            logger.info("ChunkEmbeddingManager initialized successfully")
+            logger.info("ChunkEmbeddingManager initialized with IndexIVFFlat")
         except Exception as e:
             logger.error(f"Failed to initialize ChunkEmbeddingManager: {e}")
             raise
@@ -50,12 +54,17 @@ class ChunkEmbeddingManager:
             logger.error(f"Failed to load processing_config.yaml: {e}")
             raise
     
-    def embed_chunks(self, chunks: List[Dict]) -> np.ndarray:
-        """Generate embeddings for a list of chunks."""
+    def embed_chunks(self, chunks: List[Dict], batch_size: int = 32) -> np.ndarray:
+        """Generate embeddings for a list of chunks in batches."""
         try:
             texts = [chunk.get('text', '') for chunk in chunks]
-            embeddings = self.embedding_model.encode(texts, convert_to_numpy=True, show_progress_bar=False)
-            logger.info(f"Generated embeddings for {len(chunks)} chunks")
+            embeddings = []
+            for i in range(0, len(texts), batch_size):
+                batch_texts = texts[i:i + batch_size]
+                batch_embeddings = self.embedding_model.encode(batch_texts, convert_to_numpy=True, show_progress_bar=False)
+                embeddings.append(batch_embeddings)
+            embeddings = np.concatenate(embeddings, axis=0)
+            logger.info(f"Generated embeddings for {len(chunks)} chunks in batches of {batch_size}")
             return embeddings
         except Exception as e:
             logger.error(f"Failed to embed chunks: {e}")
@@ -74,6 +83,8 @@ class ChunkEmbeddingManager:
     def save_index(self) -> None:
         """Save FAISS index and metadata to disk."""
         try:
+            # Ensure the index directory exists
+            INDEX_PATH.parent.mkdir(parents=True, exist_ok=True)
             faiss.write_index(self.index, str(INDEX_PATH))
             with open(METADATA_PATH, 'w', encoding='utf-8') as f:
                 json.dump(self.metadata, f, indent=2)

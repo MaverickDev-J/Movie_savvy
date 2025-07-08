@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 import logging
 from pathlib import Path
 from typing import List, Dict
@@ -7,6 +8,8 @@ import yaml
 import requests
 import re
 from urllib.parse import urlparse, parse_qs
+
+load_dotenv()
 
 # Setup paths
 BASE_DIR = Path(__file__).resolve().parent.parent.parent / "rag_system"
@@ -128,11 +131,16 @@ class YouTubeHandler:
         try:
             with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
                 config = yaml.safe_load(f)
+            
             youtube_config = config.get('youtube', {})
-            search_api_key = youtube_config.get('search_api_key')
-            transcript_api_key = youtube_config.get('transcript_api_key')
+            
+            # Load API keys from environment variables
+            search_api_key = os.getenv('YOUTUBE_API_KEY')
+            transcript_api_key = os.getenv('SEARCHAPI_TRANSCRIPT_KEY')
+            
             if not search_api_key or not transcript_api_key:
-                raise ValueError("Missing API keys in rag_config.yaml")
+                raise ValueError("Missing API keys in environment variables")
+                
             self.youtube = build('youtube', 'v3', developerKey=search_api_key)
             self.transcript_fetcher = YouTubeTranscriptFetcher(transcript_api_key)
             self.max_results = youtube_config.get('max_results', 3)
